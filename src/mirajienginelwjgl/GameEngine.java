@@ -5,6 +5,8 @@
  */
 package mirajienginelwjgl;
 
+import mirajienginelwjgl.graphics.Window;
+
 /**
  *
  * @author Ajikozau
@@ -40,7 +42,9 @@ public class GameEngine implements Runnable {
             init();
             gameLoop();
         } catch (Exception excp){
-            excp.printStackTrace();
+            excp.printStackTrace(System.out);
+        } finally {
+            cleanup();
         }
     }
     
@@ -97,5 +101,9 @@ public class GameEngine implements Runnable {
     protected void render(){
         gameLogic.render(window);
         window.update();
+    }
+    
+    protected void cleanup(){
+        gameLogic.cleanup();
     }
 }

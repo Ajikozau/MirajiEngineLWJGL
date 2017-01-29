@@ -5,6 +5,8 @@
  */
 package mirajienginelwjgl;
 
+import mirajienginelwjgl.graphics.Window;
+
 /**
  *
  * @author Ajikozau
@@ -14,4 +16,5 @@ public interface IGameLogic {
     void input (Window window);
     void update(float interval);
     void render(Window window);
+    void cleanup();
 }
