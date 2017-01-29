@@ -33,8 +33,14 @@ public class TestGame implements IGameLogic {
             -0.5f, -0.5f, 0.0f,
             0.5f, -0.5f, 0.0f,
             0.5f, 0.5f, 0.0f,};
+        float[] colours = new float[]{
+            0.5f, 0.0f, 0.0f,
+            0.0f, 0.5f, 0.0f,
+            0.0f, 0.0f, 0.5f,
+            0.0f, 0.5f, 0.5f,
+        };
         int[] indices = new int[]{0, 1, 3, 3, 1, 2,};
-        mesh = new Mesh(positions, indices);
+        mesh = new Mesh(positions, colours, indices);
     }
     
     @Override
