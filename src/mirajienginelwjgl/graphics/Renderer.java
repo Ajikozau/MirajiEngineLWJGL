@@ -25,12 +25,10 @@ public class Renderer {
     private static final float FOV = (float) Math.toRadians(60.0f);    
     private static final float Z_NEAR = 0.01f;    
     private static final float Z_FAR = 1000.0f;
-    
-    private Matrix4f projectionMatrix;    
-    
+        
     private ShaderProgram shaderProgram;
     
-    private Transformation transformation;
+    private final Transformation transformation;
     
     public Renderer() {
         transformation = new Transformation();
@@ -43,8 +41,6 @@ public class Renderer {
         shaderProgram.createFragmentShader(StaticHelpers.loadResource("/resources/fragment.fs"));
         shaderProgram.link();       
         //create matrix
-        float aspectRatio = (float) window.getWidth() / window.getHeight();
-        projectionMatrix = new Matrix4f().perspective(FOV, aspectRatio, Z_NEAR, Z_FAR);
         shaderProgram.createUniform("projectionMatrix");
         shaderProgram.createUniform("worldMatrix");        
         window.setClearColor(0.0f, 0.0f, 0.0f, 0.0f);                

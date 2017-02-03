@@ -93,6 +93,7 @@ public class Mesh {
         //delete VBOs
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glDeleteBuffers(posVboId);
+        glDeleteBuffers(colourVboId);
         glDeleteBuffers(idxVboId);
         //delete VAO
         glBindVertexArray(0);

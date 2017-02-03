@@ -5,7 +5,6 @@
  */
 package mirajienginelwjgl.test;
 
-import static javafx.scene.paint.Color.color;
 import mirajienginelwjgl.engine.GameItem;
 import mirajienginelwjgl.engine.IGameLogic;
 import mirajienginelwjgl.graphics.Mesh;
@@ -57,6 +56,7 @@ public class TestGame implements IGameLogic {
         displxInc = 0;
         displyInc = 0;
         displzInc = 0;
+        scaleInc = 0;
         
         if (window.isKeyPressed(GLFW_KEY_UP)) {
             displyInc = 1;
