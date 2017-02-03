@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package mirajienginelwjgl;
+package mirajienginelwjgl.engine;
 
 import mirajienginelwjgl.graphics.Window;
 
@@ -12,7 +12,7 @@ import mirajienginelwjgl.graphics.Window;
  * @author Ajikozau
  */
 public interface IGameLogic {
-    void init() throws Exception;
+    void init(Window window) throws Exception;
     void input (Window window);
     void update(float interval);
     void render(Window window);

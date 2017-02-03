@@ -3,7 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package mirajienginelwjgl;
+package mirajienginelwjgl.test;
+
+import mirajienginelwjgl.engine.GameEngine;
+import mirajienginelwjgl.engine.IGameLogic;
 
 /**
  *

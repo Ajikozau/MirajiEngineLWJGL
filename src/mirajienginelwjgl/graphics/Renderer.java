@@ -6,6 +6,8 @@
 package mirajienginelwjgl.graphics;
 
 import helper.StaticHelpers;
+import mirajienginelwjgl.engine.GameItem;
+import org.joml.Matrix4f;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL30.*;
@@ -16,23 +18,43 @@ import static org.lwjgl.opengl.GL30.*;
  */
 public class Renderer {
     
+    
+    /**
+     * Field of View in Radians
+     */
+    private static final float FOV = (float) Math.toRadians(60.0f);    
+    private static final float Z_NEAR = 0.01f;    
+    private static final float Z_FAR = 1000.0f;
+    
+    private Matrix4f projectionMatrix;    
+    
     private ShaderProgram shaderProgram;
     
+    private Transformation transformation;
+    
     public Renderer() {
+        transformation = new Transformation();
     }
     
-    public void init() throws Exception {      
+    public void init(Window window) throws Exception {      
+        //create shader
         shaderProgram = new ShaderProgram();
         shaderProgram.createVertexShader(StaticHelpers.loadResource("/resources/vertex.vs"));
         shaderProgram.createFragmentShader(StaticHelpers.loadResource("/resources/fragment.fs"));
-        shaderProgram.link();        
+        shaderProgram.link();       
+        //create matrix
+        float aspectRatio = (float) window.getWidth() / window.getHeight();
+        projectionMatrix = new Matrix4f().perspective(FOV, aspectRatio, Z_NEAR, Z_FAR);
+        shaderProgram.createUniform("projectionMatrix");
+        shaderProgram.createUniform("worldMatrix");        
+        window.setClearColor(0.0f, 0.0f, 0.0f, 0.0f);                
     }
     
     public void clear() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
     
-    public void render(Window window, Mesh mesh) {
+    public void render(Window window, GameItem[] gameItems) {
         clear();
 
         if (window.isResized()) {
@@ -41,17 +63,17 @@ public class Renderer {
         }
 
         shaderProgram.bind();
-
-        // Draw the mesh
-        glBindVertexArray(mesh.getVaoId());
-        glEnableVertexAttribArray(0);
-        glEnableVertexAttribArray(1);
-        glDrawElements(GL_TRIANGLES, mesh.getVertexCount(), GL_UNSIGNED_INT, 0);
-
-        // Restore state
-        glDisableVertexAttribArray(0);
-        glBindVertexArray(0);
-
+        //update projection Matrix
+        Matrix4f projectionMatrix = transformation.getProjectionMatrix(FOV, window.getWidth(), window.getHeight(), Z_NEAR, Z_FAR);
+        shaderProgram.setUniform("projectionMatrix", projectionMatrix);
+        //render each item
+        for (GameItem gameItem : gameItems){
+            //set World Matrix for this item
+            Matrix4f worldMatrix = transformation.getWorldMatrix(gameItem.getPosition(), gameItem.getRotation(), gameItem.getScale());
+            shaderProgram.setUniform("worldMatrix", worldMatrix);
+            //Render the mesh for this game item
+            gameItem.getMesh().render();
+        }     
         shaderProgram.unbind();
 }
     

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package mirajienginelwjgl;
+package mirajienginelwjgl.engine;
 
 import mirajienginelwjgl.graphics.Window;
 
@@ -51,7 +51,7 @@ public class GameEngine implements Runnable {
     protected void init() throws Exception {
         window.init();
         timer.init();
-        gameLogic.init();
+        gameLogic.init(window);
     }
     
     protected void gameLoop(){
