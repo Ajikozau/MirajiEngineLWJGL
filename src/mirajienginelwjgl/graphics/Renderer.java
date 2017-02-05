@@ -37,13 +37,13 @@ public class Renderer {
     public void init(Window window) throws Exception {      
         //create shader
         shaderProgram = new ShaderProgram();
-        shaderProgram.createVertexShader(StaticHelpers.loadResource("/resources/vertex.vs"));
-        shaderProgram.createFragmentShader(StaticHelpers.loadResource("/resources/fragment.fs"));
+        shaderProgram.createVertexShader(StaticHelpers.loadResource("/resources/shaders/vertex.vs"));
+        shaderProgram.createFragmentShader(StaticHelpers.loadResource("/resources/shaders/fragment.fs"));
         shaderProgram.link();       
         //create matrix
         shaderProgram.createUniform("projectionMatrix");
-        shaderProgram.createUniform("worldMatrix");        
-        window.setClearColor(0.0f, 0.0f, 0.0f, 0.0f);                
+        shaderProgram.createUniform("worldMatrix");      
+        shaderProgram.createUniform("texture_sampler");            
     }
     
     public void clear() {
@@ -62,6 +62,8 @@ public class Renderer {
         //update projection Matrix
         Matrix4f projectionMatrix = transformation.getProjectionMatrix(FOV, window.getWidth(), window.getHeight(), Z_NEAR, Z_FAR);
         shaderProgram.setUniform("projectionMatrix", projectionMatrix);
+        
+        shaderProgram.setUniform("texture_sampler", 0);
         //render each item
         for (GameItem gameItem : gameItems){
             //set World Matrix for this item
