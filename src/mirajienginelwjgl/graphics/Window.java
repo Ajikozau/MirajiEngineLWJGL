@@ -39,6 +39,7 @@ public class Window {
     }
         
     private long windowHandle;
+    public long getWindowHandle(){ return windowHandle; }
     private GLFWErrorCallback errorCallback;
     private GLFWKeyCallback keyCallback;
     private GLFWWindowSizeCallback windowSizeCallback;

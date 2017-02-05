@@ -50,7 +50,7 @@ public class Renderer {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
     
-    public void render(Window window, GameItem[] gameItems) {
+    public void render(Window window, Camera camera, GameItem[] gameItems) {
         clear();
 
         if (window.isResized()) {
@@ -62,13 +62,15 @@ public class Renderer {
         //update projection Matrix
         Matrix4f projectionMatrix = transformation.getProjectionMatrix(FOV, window.getWidth(), window.getHeight(), Z_NEAR, Z_FAR);
         shaderProgram.setUniform("projectionMatrix", projectionMatrix);
-        
+        //update view Matrix
+        Matrix4f viewMatrix = transformation.getViewMatrix(camera);
+       
         shaderProgram.setUniform("texture_sampler", 0);
         //render each item
         for (GameItem gameItem : gameItems){
             //set World Matrix for this item
-            Matrix4f worldMatrix = transformation.getWorldMatrix(gameItem.getPosition(), gameItem.getRotation(), gameItem.getScale());
-            shaderProgram.setUniform("worldMatrix", worldMatrix);
+            Matrix4f modelViewMatrix = transformation.getModelViewMatrix(gameItem, viewMatrix);
+            shaderProgram.setUniform("worldMatrix", modelViewMatrix);
             //Render the mesh for this game item
             gameItem.getMesh().render();
         }     
