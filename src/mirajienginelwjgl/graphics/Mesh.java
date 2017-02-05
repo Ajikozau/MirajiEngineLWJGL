@@ -9,7 +9,7 @@ import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.List;
-import org.joml.Vector3f;
+import mirajienginelwjgl.engine.items.Material;
 import org.lwjgl.system.MemoryUtil;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
@@ -23,30 +23,24 @@ import static org.lwjgl.opengl.GL30.*;
  * @author Ajikozau
  */
 public class Mesh {
-    private static final Vector3f DEFAULT_COLOUR = new Vector3f(1.0f, 1.0f, 1.0f);
     private final int vaoId;    
     public int getVaoId() { return vaoId; }
     private final List<Integer> vboIdList;
     private final int vertexCount;    
     public int getVertexCount() { return vertexCount; }
-    private Texture texture;
-    public Texture getTexture() { return texture; }
-    public void setTexture(Texture texture) {
-        this.texture = texture;
-    }   
-    private Vector3f colour;    
-    public Vector3f getColour() { return colour; }
-    public void setColour(Vector3f colour) {
-        this.colour = colour;
+    private Material material;
+    public Material getMaterial() { return material; }
+    public void setMaterial(Material material){
+        this.material = material;
     }
+    
     public Mesh(float[] positions, float[] textCoords, float[] normals, int[] indices){
         FloatBuffer posBuffer = null;
         FloatBuffer textCoordsBuffer = null;
         FloatBuffer vecNormalsBuffer = null;
         IntBuffer indicesBuffer = null;
         
-        try {
-            colour = DEFAULT_COLOUR;            
+        try {              
             vertexCount = indices.length;
             vboIdList = new ArrayList();
 
@@ -104,12 +98,9 @@ public class Mesh {
             }
         }
     }
-    
-    public boolean isTextured(){
-        return texture != null;
-    }
-    
-    public void render() {           
+        
+    public void render() {          
+        Texture texture = material.getTexture();
         if(texture != null){
         //Activate first texture unit
             glActiveTexture(GL_TEXTURE0);
@@ -140,6 +131,7 @@ public class Mesh {
         for (int vboId : vboIdList) {
             glDeleteBuffers(vboId);
         }
+        Texture texture = material.getTexture();
         if (texture != null){
             texture.cleanup();
         }

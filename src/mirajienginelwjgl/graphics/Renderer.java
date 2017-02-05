@@ -7,10 +7,11 @@ package mirajienginelwjgl.graphics;
 
 import helper.StaticHelpers;
 import mirajienginelwjgl.engine.items.GameItem;
+import mirajienginelwjgl.graphics.lighting.PointLight;
 import org.joml.Matrix4f;
+import org.joml.Vector3f;
+import org.joml.Vector4f;
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL20.*;
-import static org.lwjgl.opengl.GL30.*;
 
 /**
  *
@@ -25,13 +26,15 @@ public class Renderer {
     private static final float FOV = (float) Math.toRadians(60.0f);    
     private static final float Z_NEAR = 0.01f;    
     private static final float Z_FAR = 1000.0f;
-        
+    
+    private final Transformation transformation;    
+    
     private ShaderProgram shaderProgram;
-    
-    private final Transformation transformation;
-    
+    private float specularPower;
+        
     public Renderer() {
         transformation = new Transformation();
+        specularPower = 10f;
     }
     
     public void init(Window window) throws Exception {      
@@ -44,16 +47,19 @@ public class Renderer {
         shaderProgram.createUniform("projectionMatrix");
         shaderProgram.createUniform("modelViewMatrix");      
         shaderProgram.createUniform("texture_sampler");       
-        //default colour
-        shaderProgram.createUniform("colour");
-        shaderProgram.createUniform("useColour");
+        //create material uniform
+        shaderProgram.createMaterialUniform("material");
+        //create lighting uniforms
+        shaderProgram.createUniform("specularPower");
+        shaderProgram.createUniform("ambientLight");
+        shaderProgram.createPointLightUniform("pointLight");
     }
     
     public void clear() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
     
-    public void render(Window window, Camera camera, GameItem[] gameItems) {
+    public void render(Window window, Camera camera, GameItem[] gameItems, Vector3f ambientLight, PointLight pointLight) {
         clear();
 
         if (window.isResized()) {
@@ -67,17 +73,27 @@ public class Renderer {
         shaderProgram.setUniform("projectionMatrix", projectionMatrix);
         //update view Matrix
         Matrix4f viewMatrix = transformation.getViewMatrix(camera);
-       
+        //update Light uniforms
+        shaderProgram.setUniform("ambientLight", ambientLight);
+        shaderProgram.setUniform("specularPower", specularPower);
+        //copy light object and transform
+        PointLight currPointLight = new PointLight(pointLight);
+        Vector3f lightPos = currPointLight.getPosition();
+        Vector4f aux = new Vector4f(lightPos, 1).mul(viewMatrix);
+        lightPos.x = aux.x;
+        lightPos.y = aux.y;
+        lightPos.z = aux.z;
+        shaderProgram.setUniform("pointLight", currPointLight);               
+        
         shaderProgram.setUniform("texture_sampler", 0);
         //render each item
         for (GameItem gameItem : gameItems){
             Mesh mesh = gameItem.getMesh();
-            //set World Matrix for this item
+            //set model view matrix for this item
             Matrix4f modelViewMatrix = transformation.getModelViewMatrix(gameItem, viewMatrix);
             shaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
             //Render the mesh for this game item
-            shaderProgram.setUniform("colour", mesh.getColour());
-            shaderProgram.setUniform("useColour", mesh.isTextured() ? 0 : 1);
+            shaderProgram.setUniform("material", mesh.getMaterial());
             mesh.render();
         }     
         shaderProgram.unbind();
