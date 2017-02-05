@@ -6,7 +6,7 @@
 package mirajienginelwjgl.graphics;
 
 import helper.StaticHelpers;
-import mirajienginelwjgl.engine.GameItem;
+import mirajienginelwjgl.engine.items.GameItem;
 import org.joml.Matrix4f;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL20.*;
@@ -42,8 +42,11 @@ public class Renderer {
         shaderProgram.link();       
         //create matrix
         shaderProgram.createUniform("projectionMatrix");
-        shaderProgram.createUniform("worldMatrix");      
-        shaderProgram.createUniform("texture_sampler");            
+        shaderProgram.createUniform("modelViewMatrix");      
+        shaderProgram.createUniform("texture_sampler");       
+        //default colour
+        shaderProgram.createUniform("colour");
+        shaderProgram.createUniform("useColour");
     }
     
     public void clear() {
@@ -68,11 +71,14 @@ public class Renderer {
         shaderProgram.setUniform("texture_sampler", 0);
         //render each item
         for (GameItem gameItem : gameItems){
+            Mesh mesh = gameItem.getMesh();
             //set World Matrix for this item
             Matrix4f modelViewMatrix = transformation.getModelViewMatrix(gameItem, viewMatrix);
-            shaderProgram.setUniform("worldMatrix", modelViewMatrix);
+            shaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
             //Render the mesh for this game item
-            gameItem.getMesh().render();
+            shaderProgram.setUniform("colour", mesh.getColour());
+            shaderProgram.setUniform("useColour", mesh.isTextured() ? 0 : 1);
+            mesh.render();
         }     
         shaderProgram.unbind();
 }
