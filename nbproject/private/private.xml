@@ -4,7 +4,10 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/D:/JavaProjects/MirajiEngineLWJGL/src/mirajienginelwjgl/test/TestGame.java</file>
-            <file>file:/D:/JavaProjects/MirajiEngineLWJGL/src/mirajienginelwjgl/graphics/lighting/PointLight.java</file>
+            <file>file:/D:/JavaProjects/MirajiEngineLWJGL/src/resources/shaders/fragment.fs</file>
+            <file>file:/D:/JavaProjects/MirajiEngineLWJGL/src/mirajienginelwjgl/graphics/ShaderProgram.java</file>
+            <file>file:/D:/JavaProjects/MirajiEngineLWJGL/src/mirajienginelwjgl/graphics/Renderer.java</file>
+            <file>file:/D:/JavaProjects/MirajiEngineLWJGL/src/mirajienginelwjgl/engine/GameEngine.java</file>
         </group>
     </open-files>
 </project-private>

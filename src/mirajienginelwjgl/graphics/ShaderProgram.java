@@ -8,7 +8,9 @@ import java.nio.FloatBuffer;
 import java.util.HashMap;
 import java.util.Map;
 import mirajienginelwjgl.engine.items.Material;
+import mirajienginelwjgl.graphics.lighting.DirectionalLight;
 import mirajienginelwjgl.graphics.lighting.PointLight;
+import mirajienginelwjgl.graphics.lighting.SpotLight;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import static org.lwjgl.opengl.GL20.*;
@@ -132,6 +134,18 @@ public class ShaderProgram {
         createUniform(uniformName + ".att.exponent");
     }
     
+    public void createSpotLightUniform(String uniformName) throws Exception {
+        createPointLightUniform(uniformName + ".pl");
+        createUniform(uniformName + ".conedir");
+        createUniform(uniformName + ".cutoff");        
+    }
+    
+    public void createDirectionalLightUniform(String uniformName) throws Exception {
+        createUniform(uniformName + ".colour");
+        createUniform(uniformName + ".direction");
+        createUniform(uniformName + ".intensity");
+    }
+    
     public void createMaterialUniform(String uniformName) throws Exception {
         createUniform(uniformName + ".colour");
         createUniform(uniformName + ".useColour");
@@ -148,9 +162,43 @@ public class ShaderProgram {
         setUniform(uniformName + ".att.exponent", att.getExponent());
     }
     
+    public void setUniform(String uniformName, PointLight pointLight, int pos){
+        setUniform(uniformName + "[" + pos + "]", pointLight);
+    }
+    
     public void setUniform(String uniformName, Material material){
         setUniform(uniformName + ".colour", material.getColour() );
         setUniform(uniformName + ".useColour", material.isTextured() ? 0 : 1);
         setUniform(uniformName + ".reflectance", material.getReflectance());
+    }
+    
+    public void setUniform(String uniformName, SpotLight spotLight){
+        setUniform(uniformName + ".pl", spotLight.getPointLight());
+        setUniform(uniformName + ".conedir", spotLight.getConeDirection());
+        setUniform(uniformName + ".cutoff", spotLight.getCutOff());
+    }
+    
+    public void setUniform(String uniformName, SpotLight spotLight, int pos){
+        setUniform(uniformName + "[" + pos + "]", spotLight);
+    }
+    
+    public void setUniform(String uniformName, DirectionalLight dirLight){
+        setUniform((uniformName + ".colour"), dirLight.getColor());
+        setUniform((uniformName + ".direction"), dirLight.getDirection());
+        setUniform((uniformName + ".intensity"), dirLight.getIntensity());       
+    }
+    
+    
+    
+    public void createPointLightListUniform(String uniformName, int size) throws Exception {
+        for (int i = 0; i < size; i++){
+            createPointLightUniform(uniformName + "[" + i + "]");
+        }
+    }
+    
+    public void createSpotLightListUniform(String uniformName, int size) throws Exception {
+        for (int i = 0; i < size; i++){
+            createSpotLightUniform(uniformName + "[" + i + "]");
+        }
     }
 }
