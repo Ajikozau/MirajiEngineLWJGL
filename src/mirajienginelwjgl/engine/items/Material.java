@@ -46,6 +46,11 @@ public class Material {
         this.reflectance = reflectance;
     }
     
+    public Material(Texture texture){
+        this();
+        this.texture = texture;
+    }
+    
     public boolean isTextured() {
         return texture != null;
     }

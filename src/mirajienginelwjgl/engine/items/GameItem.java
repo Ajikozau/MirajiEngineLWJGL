@@ -14,9 +14,11 @@ import org.joml.Vector3f;
  */
 public class GameItem {
     
-    private final Mesh mesh;
+    protected Mesh mesh;
     public Mesh getMesh() { return mesh; }
-    
+    public void setMesh(Mesh mesh){
+        this.mesh = mesh;
+    }    
     private final Vector3f position;
     public Vector3f getPosition() { return position; }
     public void setPosition(float x, float y, float z) {
@@ -35,14 +37,15 @@ public class GameItem {
         rotation.set(x, y, z);
     }    
     
-    public GameItem(Mesh mesh){
-        this.mesh = mesh;
+    
+    public GameItem(){
         position = new Vector3f(0, 0, 0);
         scale = 1;
         rotation = new Vector3f(0, 0, 0);
     }
     
-    
-    
-    
+    public GameItem(Mesh mesh){
+        this();
+        this.mesh = mesh;
+    }   
 }

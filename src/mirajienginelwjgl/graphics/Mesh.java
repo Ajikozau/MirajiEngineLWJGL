@@ -90,7 +90,7 @@ public class Mesh {
             if (textCoordsBuffer != null){
                 MemoryUtil.memFree(textCoordsBuffer);
             }
-            if(vecNormalsBuffer != null){
+            if (vecNormalsBuffer != null){
                 MemoryUtil.memFree(vecNormalsBuffer);
             }
             if (indicesBuffer != null) {
@@ -141,4 +141,14 @@ public class Mesh {
         glDeleteVertexArrays(vaoId);        
     }
     
+    public void deleteBuffers() {
+        glDisableVertexAttribArray(0);
+        
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        for (int vboId : vboIdList){
+            glDeleteBuffers(vboId);
+        }
+        glBindVertexArray(0);
+        glDeleteVertexArrays(vaoId);
+    }   
 }
