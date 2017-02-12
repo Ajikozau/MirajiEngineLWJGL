@@ -16,7 +16,7 @@ import static org.lwjgl.opengl.GL30.glGenerateMipmap;
  * @author Ajikozau
  */
 public class Texture {
-    private final int id;
+    private int id;
     public int getId(){ return id; }
     private int width;
     public int getWidth() { return width; }   
@@ -30,14 +30,10 @@ public class Texture {
         this.id = id;
     }
     public Texture(InputStream is) throws Exception {
-        id = loadTexture(is);
+        loadTexture(is);
     }  
     
-    public void bind() {
-        glBindTexture(GL_TEXTURE_2D, id);
-    }
-    
-    private int loadTexture(InputStream is) throws Exception {
+    private void loadTexture(InputStream is) throws Exception {
         PNGDecoder decoder = new PNGDecoder(is);
         
         this.width = decoder.getWidth();
@@ -47,8 +43,8 @@ public class Texture {
         decoder.decode(buf, width * 4, Format.RGBA);
         buf.flip();
         
-        int textureId = glGenTextures();
-        glBindTexture(GL_TEXTURE_2D, textureId);
+        id = glGenTextures();
+        glBindTexture(GL_TEXTURE_2D, id);
         glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
         
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -57,11 +53,13 @@ public class Texture {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, buf);
         
         glGenerateMipmap(GL_TEXTURE_2D);
-        return textureId;
     }
+    
+    public void bind() {
+        glBindTexture(GL_TEXTURE_2D, id);
+    }    
     
     public void cleanup() {
         glDeleteTextures(id);
-    }
-        
+    }        
 }

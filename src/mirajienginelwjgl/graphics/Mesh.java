@@ -9,6 +9,8 @@ import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
+import mirajienginelwjgl.engine.items.GameItem;
 import mirajienginelwjgl.engine.items.Material;
 import org.lwjgl.system.MemoryUtil;
 import static org.lwjgl.opengl.GL11.*;
@@ -98,30 +100,42 @@ public class Mesh {
             }
         }
     }
-        
-    public void render() {          
+    
+    private void initRender(){
         Texture texture = material.getTexture();
-        if(texture != null){
-        //Activate first texture unit
+        if (texture != null){
             glActiveTexture(GL_TEXTURE0);
-            //Bind texture
             glBindTexture(GL_TEXTURE_2D, texture.getId());
         }
         
-        //Draw Mesh
         glBindVertexArray(getVaoId());
         glEnableVertexAttribArray(0);
         glEnableVertexAttribArray(1);
         glEnableVertexAttribArray(2);
-        glDrawElements(GL_TRIANGLES, getVertexCount(), GL_UNSIGNED_INT, 0);
-
-        // Restore state
+    }
+    
+    private void endRender(){
         glDisableVertexAttribArray(0);
         glDisableVertexAttribArray(1);
         glDisableVertexAttribArray(2);
         glBindVertexArray(0);
+
         glBindTexture(GL_TEXTURE_2D, 0);
+    }
         
+    public void render() {          
+        initRender();
+        glDrawElements(GL_TRIANGLES, getVertexCount(), GL_UNSIGNED_INT, 0);
+        endRender();        
+    }
+    
+    public void renderList(List<GameItem> gameItems, Consumer<GameItem> consumer){
+        initRender();
+        for (GameItem gameItem : gameItems){
+            consumer.accept(gameItem);
+            glDrawElements(GL_TRIANGLES, getVertexCount(), GL_UNSIGNED_INT, 0);
+        }
+        endRender();
     }
     
     public void cleanUp() {

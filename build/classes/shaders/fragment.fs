@@ -19,6 +19,7 @@ struct Attenuation
 struct PointLight
 {
     vec3 colour;
+    // Light position is assumed to be in view coordinates
     vec3 position;
     float intensity;
     Attenuation att;
@@ -41,7 +42,7 @@ struct DirectionalLight
 struct Material
 {
     vec3 colour;
-    int useColour;
+    int hasTexture;
     float reflectance;
 };
 
@@ -65,41 +66,42 @@ vec4 calcLightColour(vec3 light_colour, float light_intensity, vec3 position, ve
     // Specular Light
     vec3 camera_direction = normalize(-position);
     vec3 from_light_dir = -to_light_dir;
-    vec3 reflected_light = normalize(reflect(from_light_dir, normal));
-    float specularFactor = max(dot(camera_direction, reflected_light), 0.0);
+    vec3 reflected_light = normalize(reflect(from_light_dir , normal));
+    float specularFactor = max( dot(camera_direction, reflected_light), 0.0);
     specularFactor = pow(specularFactor, specularPower);
-    specColour = light_intensity * specularFactor * material.reflectance * vec4(light_colour, 1.0);
-	
-    return(diffuseColour + specColour);
+    specColour = light_intensity  * specularFactor * material.reflectance * vec4(light_colour, 1.0);
+
+    return (diffuseColour + specColour);
 }
 
 vec4 calcPointLight(PointLight light, vec3 position, vec3 normal)
 {
     vec3 light_direction = light.position - position;
-    vec3 to_light_dir = normalize(light_direction);
-    vec4 light_colour = calcLightColour(light.colour, light.intensity, position, to_light_dir, normal);	
-		
-    //Attenuation
+    vec3 to_light_dir  = normalize(light_direction);
+    vec4 light_colour = calcLightColour(light.colour, light.intensity, position, to_light_dir, normal);
+
+    // Apply Attenuation
     float distance = length(light_direction);
-    float attenuationInv = light.att.constant + light.att.linear * distance + light.att.exponent * distance * distance;
+    float attenuationInv = light.att.constant + light.att.linear * distance +
+        light.att.exponent * distance * distance;
     return light_colour / attenuationInv;
 }
 
 vec4 calcSpotLight(SpotLight light, vec3 position, vec3 normal)
 {
     vec3 light_direction = light.pl.position - position;
-    vec3 to_light_dir = normalize(light_direction);
-    vec3 from_light_dir = -to_light_dir;
-    float spot_alpha = dot(from_light_dir, normalize(light.conedir));
+    vec3 to_light_dir  = normalize(light_direction);
+    vec3 from_light_dir  = -to_light_dir;
+    float spot_alfa = dot(from_light_dir, normalize(light.conedir));
     
     vec4 colour = vec4(0, 0, 0, 0);
     
-    if(spot_alpha > light.cutoff)
+    if ( spot_alfa > light.cutoff ) 
     {
         colour = calcPointLight(light.pl, position, normal);
-        colour += (1.0 - (1.0 - spot_alpha)/(1.0 - light.cutoff));
+        colour *= (1.0 - (1.0 - spot_alfa)/(1.0 - light.cutoff));
     }
-    return colour;
+    return colour;    
 }
 
 vec4 calcDirectionalLight(DirectionalLight light, vec3 position, vec3 normal)
@@ -109,32 +111,33 @@ vec4 calcDirectionalLight(DirectionalLight light, vec3 position, vec3 normal)
 
 void main()
 {
-    vec4 baseColour;
-    if (material.useColour == 1)
-    {
-    	baseColour = vec4(material.colour, 1);
-    }
-    else
+    vec4 baseColour; 
+    if ( material.hasTexture == 1 )
     {
         baseColour = texture(texture_sampler, outTexCoord);
     }
+    else
+    {
+        baseColour = vec4(material.colour, 1);
+    }
     vec4 totalLight = vec4(ambientLight, 1.0);
     totalLight += calcDirectionalLight(directionalLight, mvVertexPos, mvVertexNormal);
-    
+
     for (int i=0; i<MAX_POINT_LIGHTS; i++)
     {
-        if(pointLights[i].intensity > 0)
+        if ( pointLights[i].intensity > 0 )
         {
-            totalLight += calcPointLight(pointLights[i], mvVertexPos, mvVertexNormal);
+            totalLight += calcPointLight(pointLights[i], mvVertexPos, mvVertexNormal); 
         }
     }
 
     for (int i=0; i<MAX_SPOT_LIGHTS; i++)
     {
-        if(spotLights[i].pl.intensity > 0)
+        if ( spotLights[i].pl.intensity > 0 )
         {
             totalLight += calcSpotLight(spotLights[i], mvVertexPos, mvVertexNormal);
         }
     }
+    
     fragColor = baseColour * totalLight;
 }
