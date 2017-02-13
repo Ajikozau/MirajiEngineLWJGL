@@ -55,7 +55,7 @@ public class Renderer {
      private void setupSkyBoxShader() throws Exception {
         skyBoxShaderProgram = new ShaderProgram();
         skyBoxShaderProgram.createVertexShader(StaticHelpers.loadResource("/shaders/sb_vertex.vs"));
-        skyBoxShaderProgram.createFragmentShader(StaticHelpers.loadResource("/shaders/sb_fragment.vs"));
+        skyBoxShaderProgram.createFragmentShader(StaticHelpers.loadResource("/shaders/sb_fragment.fs"));
         skyBoxShaderProgram.link();
         
         skyBoxShaderProgram.createUniform("projectionMatrix");
@@ -127,7 +127,7 @@ public class Renderer {
         viewMatrix.m32(0);        
         Matrix4f modelViewMatrix = transformation.buildModelViewMatrix(skyBox, viewMatrix);
         skyBoxShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
-        skyBoxShaderProgram.setUniform("ambientLight", scene.getSceneLight().getAmbientLight());
+        skyBoxShaderProgram.setUniform("ambientLight", scene.getSceneLight().getSkyBoxLight());
         
         skyBox.getMesh().render();
         skyBoxShaderProgram.unbind();
@@ -156,7 +156,7 @@ public class Renderer {
     
     public void renderLights(Matrix4f viewMatrix, SceneLight sceneLight){
         //update Light uniforms
-        sceneShaderProgram.setUniform("ambientLight", sceneLight.getAmbientLight());
+        sceneShaderProgram.setUniform("ambientLight", sceneLight.getAmbientLight());        
         sceneShaderProgram.setUniform("specularPower", specularPower);
         //copy pointlight objects and transform
         PointLight[] pointLightList = sceneLight.getPointLightList();
@@ -188,7 +188,7 @@ public class Renderer {
         }
         //copy directionallight and transform
         DirectionalLight currDirLight = new DirectionalLight(sceneLight.getDirectionalLight());
-        Vector4f dir = new Vector4f(currDirLight.getDirection(), 0).mul(viewMatrix);
+        Vector4f dir = new Vector4f(currDirLight.getDirection(), 0).mul(viewMatrix);                
         currDirLight.setDirection(new Vector3f(dir.x, dir.y, dir.z));
         sceneShaderProgram.setUniform("directionalLight", currDirLight);
     }
@@ -209,15 +209,15 @@ public class Renderer {
         hudShaderProgram.unbind();
     }  
     
-    public void cleanup() {
+    public void cleanup() {                
+        if(skyBoxShaderProgram != null){
+            skyBoxShaderProgram.cleanup();
+        }        
         if(sceneShaderProgram != null) {
             sceneShaderProgram.cleanup();
         }
         if(hudShaderProgram != null){
             hudShaderProgram.cleanup();
         }
-        if(skyBoxShaderProgram != null){
-            skyBoxShaderProgram.cleanup();
-        }        
     }
 }

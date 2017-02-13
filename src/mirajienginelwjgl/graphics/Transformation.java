@@ -60,10 +60,10 @@ public class Transformation {
     
     public Matrix4f buildModelViewMatrix(GameItem gameItem, Matrix4f viewMatrix){
         Vector3f rotation = gameItem.getRotation();
-        modelViewMatrix.identity().translate(gameItem.getPosition()).rotateX((float)Math.toRadians(-rotation.x)).rotateY((float)Math.toRadians(-rotation.y)).
+        modelMatrix.identity().translate(gameItem.getPosition()).rotateX((float)Math.toRadians(-rotation.x)).rotateY((float)Math.toRadians(-rotation.y)).
                 rotateZ((float)Math.toRadians(-rotation.z)).scale(gameItem.getScale());
-        Matrix4f viewCurr = new Matrix4f(viewMatrix);
-        return viewCurr.mul(modelViewMatrix);
+        modelViewMatrix.set(viewMatrix);
+        return modelViewMatrix.mul(modelMatrix);
     }       
    
     public Matrix4f buildOrthoProjModelMatrix(GameItem gameItem, Matrix4f orthoMatrix){

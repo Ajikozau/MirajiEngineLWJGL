@@ -20,10 +20,7 @@ import mirajienginelwjgl.graphics.lighting.SceneLight;
 public class Scene {
     
     private Map<Mesh, List<GameItem>> meshMap;    
-    public Map<Mesh, List<GameItem>> getMeshMap() { return meshMap; }    
-    private GameItem[] gameItems;
-    public GameItem[] getGameItems(){ return gameItems; }
-    
+    public Map<Mesh, List<GameItem>> getMeshMap() { return meshMap; }        
     private SkyBox skyBox;
     public SkyBox getSkyBox(){ return skyBox; }
     public void setSkyBox(SkyBox skyBox) {
@@ -52,5 +49,9 @@ public class Scene {
             list.add(gameItem);
         }
     }
-    
+    public void cleanup() {
+        for (Mesh mesh : meshMap.keySet()) {
+            mesh.cleanUp();
+        }
+    }
 }

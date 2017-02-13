@@ -39,7 +39,7 @@ public class Hud implements IHud {
         compassItem = new GameItem(mesh);
         compassItem.setScale(40.0f);
         //Rotate to transform to screen coords
-        compassItem.setPosition(0f, 0f, 180f);
+        compassItem.setRotation(0f, 0f, 180f);
                 
         gameItems = new GameItem[]{statusTextItem, compassItem};
     }

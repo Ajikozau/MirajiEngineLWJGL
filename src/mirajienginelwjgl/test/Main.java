@@ -21,7 +21,7 @@ public class Main {
         try {
             boolean vSync = true;
             IGameLogic gameLogic = new TestGame();
-            GameEngine gameEng = new GameEngine("GAME", 640, 480, vSync, gameLogic);
+            GameEngine gameEng = new GameEngine("GAME", vSync, gameLogic);
             gameEng.start();
         } catch (Exception excp) {
             excp.printStackTrace(System.out);

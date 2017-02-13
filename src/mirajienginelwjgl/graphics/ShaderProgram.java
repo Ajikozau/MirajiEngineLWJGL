@@ -146,8 +146,7 @@ public class ShaderProgram {
         setUniform(uniformName + ".direction", dirLight.getDirection());
         setUniform(uniformName + ".intensity", dirLight.getIntensity());       
     }
-    
-    
+        
     public void setUniform(String uniformName, Material material){
         setUniform(uniformName + ".colour", material.getColour() );
         setUniform(uniformName + ".hasTexture", material.isTextured() ? 1 : 0);

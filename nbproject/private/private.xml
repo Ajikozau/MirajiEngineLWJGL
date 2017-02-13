@@ -2,13 +2,6 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/D:/JavaProjects/MirajiEngineLWJGL/src/mirajienginelwjgl/test/TestGame.java</file>
-            <file>file:/D:/JavaProjects/MirajiEngineLWJGL/src/mirajienginelwjgl/graphics/ShaderProgram.java</file>
-            <file>file:/D:/JavaProjects/MirajiEngineLWJGL/src/mirajienginelwjgl/graphics/Transformation.java</file>
-            <file>file:/D:/JavaProjects/MirajiEngineLWJGL/src/models/skybox.obj</file>
-            <file>file:/D:/JavaProjects/MirajiEngineLWJGL/src/mirajienginelwjgl/graphics/Scene.java</file>
-            <file>file:/D:/JavaProjects/MirajiEngineLWJGL/src/mirajienginelwjgl/engine/GameEngine.java</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>
