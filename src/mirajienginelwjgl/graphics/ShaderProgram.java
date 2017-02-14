@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 import mirajienginelwjgl.engine.items.Material;
 import mirajienginelwjgl.graphics.lighting.DirectionalLight;
+import mirajienginelwjgl.graphics.lighting.Fog;
 import mirajienginelwjgl.graphics.lighting.PointLight;
 import mirajienginelwjgl.graphics.lighting.SpotLight;
 import org.joml.Matrix4f;
@@ -81,6 +82,12 @@ public class ShaderProgram {
         createUniform(uniformName + ".hasTexture");
         createUniform(uniformName + ".reflectance");
     }    
+    
+    public void createFogUniform(String uniformName) throws Exception {
+        createUniform(uniformName + ".activeFog");
+        createUniform(uniformName + ".colour");
+        createUniform(uniformName + ".density");
+    }   
         
     public void setUniform(String uniformName, Matrix4f value){
         //Dump the matrix into a float buffer
@@ -151,6 +158,12 @@ public class ShaderProgram {
         setUniform(uniformName + ".colour", material.getColour() );
         setUniform(uniformName + ".hasTexture", material.isTextured() ? 1 : 0);
         setUniform(uniformName + ".reflectance", material.getReflectance());
+    }
+    
+    public void setUniform(String uniformName, Fog fog){
+        setUniform(uniformName + ".activeFog", fog.isActive() ? 1 : 0);
+        setUniform(uniformName + ".colour", fog.getColour());
+        setUniform(uniformName + ".density", fog.getDensity());
     }
     
     public void createVertexShader(String shaderCode) throws Exception {

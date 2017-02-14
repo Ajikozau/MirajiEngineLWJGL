@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import mirajienginelwjgl.engine.items.GameItem;
 import mirajienginelwjgl.engine.items.SkyBox;
+import mirajienginelwjgl.graphics.lighting.Fog;
 import mirajienginelwjgl.graphics.lighting.SceneLight;
 
 /**
@@ -31,9 +32,15 @@ public class Scene {
     public void setSceneLight(SceneLight sceneLight) {
         this.sceneLight = sceneLight;
     }   
-
+    private Fog fog;
+    public Fog getFog() { return fog; }
+    public void setFog(Fog fog) {
+        this.fog = fog;
+    }
+    
     public Scene() {
         meshMap = new HashMap<>();
+        fog = Fog.NOFOG;
     }    
     
     public void setGameItems(GameItem[] gameItems){

@@ -14,6 +14,7 @@ import mirajienginelwjgl.graphics.Window;
 import mirajienginelwjgl.graphics.Renderer;
 import mirajienginelwjgl.graphics.Scene;
 import mirajienginelwjgl.graphics.lighting.DirectionalLight;
+import mirajienginelwjgl.graphics.lighting.Fog;
 import mirajienginelwjgl.graphics.lighting.SceneLight;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
@@ -55,6 +56,8 @@ public class TestGame implements IGameLogic {
         int textInc = 40;
         terrain = new Terrain(terrainSize, terrainScale, minY, maxY, "/textures/heightmap.png", "/textures/terrain.png", textInc);
         scene.setGameItems(terrain.getGameItems());
+        
+        scene.setFog(new Fog(true, new Vector3f(0.5f, 0.5f, 0.5f), 0.15f));
         
         SkyBox skyBox = new SkyBox("/models/skybox.obj", "/textures/skybox.png");
         skyBox.setScale(skyBoxScale);

@@ -129,7 +129,7 @@ public class Window {
         //Show window
         glfwShowWindow(windowHandle);
         GL.createCapabilities();
-        glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+        glClearColor(0.5f, 0.5f, 0.5f, 0.0f);
         glEnable(GL_DEPTH_TEST);
         //transparency
         glEnable(GL_BLEND);
