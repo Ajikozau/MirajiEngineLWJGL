@@ -33,6 +33,7 @@ public class TestGame implements IGameLogic {
     private Scene scene;
     private Hud hud;
     private float lightAngle;
+    private Terrain terrain;
     
     public TestGame() {
         renderer = new Renderer();
@@ -52,7 +53,7 @@ public class TestGame implements IGameLogic {
         float minY = -0.1f;
         float maxY = 0.1f;
         int textInc = 40;
-        Terrain terrain = new Terrain(terrainSize, terrainScale, minY, maxY, "/textures/heightmap.png", "/textures/terrain.png", textInc);
+        terrain = new Terrain(terrainSize, terrainScale, minY, maxY, "/textures/heightmap.png", "/textures/terrain.png", textInc);
         scene.setGameItems(terrain.getGameItems());
         
         SkyBox skyBox = new SkyBox("/models/skybox.obj", "/textures/skybox.png");
@@ -63,8 +64,8 @@ public class TestGame implements IGameLogic {
         
         hud = new Hud("DEMO");
         
-        camera.setPosition(0.0f, -0.2f, 0.0f);
-        camera.getRotation().x = 10.f;
+        camera.setPosition(0.0f, 5.0f, 0.0f);
+        camera.getRotation().x = 90;
     }
     
     private void setupLights(){
@@ -106,8 +107,13 @@ public class TestGame implements IGameLogic {
             
             hud.rotateCompass(camera.getRotation().y);
         }
-        
+        Vector3f prevPos = new Vector3f(camera.getPosition());
         camera.movePosition(cameraInc.x * CAMERA_POS_STEP, cameraInc.y * CAMERA_POS_STEP, cameraInc.z * CAMERA_POS_STEP);
+        
+        float height = terrain.getHeight(camera.getPosition());
+        if(camera.getPosition().y <= height){
+            camera.setPosition(prevPos.x, prevPos.y, prevPos.z);
+        }
         
         SceneLight sceneLight = scene.getSceneLight();
         DirectionalLight directionalLight = sceneLight.getDirectionalLight();
