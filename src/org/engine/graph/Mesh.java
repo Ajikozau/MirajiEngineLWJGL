@@ -12,7 +12,7 @@ import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL30.*;
 import org.lwjgl.system.MemoryUtil;
-import org.engine.items.GameElement;
+import org.engine.elements.GameElement;
 
 public class Mesh {
 
@@ -30,12 +30,16 @@ public class Mesh {
     public void setMaterial(Material material) {
         this.material = material;
     }
+    private final float bounds[];
+    public float[] getBounds(){ return bounds; }
 
-    public Mesh(float[] positions, float[] textCoords, float[] normals, int[] indices) {
-        this(positions, textCoords, normals, indices, createEmptyIntArray(MAX_WEIGHTS * positions.length / 3, 0), createEmptyFloatArray(MAX_WEIGHTS * positions.length / 3, 0));
+    public Mesh(float[] positions, float[] textCoords, float[] normals, int[] indices, float[] bounds) {
+        this(positions, textCoords, normals, indices, createEmptyIntArray(MAX_WEIGHTS * positions.length / 3, 0), createEmptyFloatArray(MAX_WEIGHTS * positions.length / 3, 0), bounds);
     }
     
-    public Mesh(float[] positions, float[] textCoords, float[] normals, int[] indices, int[] jointIndices, float[] weights) {
+    public Mesh(float[] positions, float[] textCoords, float[] normals, int[] indices, int[] jointIndices, float[] weights, float[] bounds) {
+        //x, y, z; -x, -y, -z
+        this.bounds = bounds;
         FloatBuffer posBuffer = null;
         FloatBuffer textCoordsBuffer = null;
         FloatBuffer vecNormalsBuffer = null;
@@ -164,10 +168,8 @@ public class Mesh {
     }
 
     public void render() {
-        initRender();
-        
+        initRender();        
         glDrawElements(GL_TRIANGLES, getVertexCount(), GL_UNSIGNED_INT, 0);
-
         endRender();
     }
     

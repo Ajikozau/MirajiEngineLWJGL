@@ -10,7 +10,7 @@ import static org.lwjgl.opengl.GL30.*;
 import static org.lwjgl.opengl.GL31.*;
 import static org.lwjgl.opengl.GL33.*;
 import org.lwjgl.system.MemoryUtil;
-import org.engine.items.GameElement;
+import org.engine.elements.GameElement;
 
 public class InstancedMesh extends Mesh {
     private static final int FLOAT_SIZE_BYTES = 4;
@@ -25,8 +25,8 @@ public class InstancedMesh extends Mesh {
 
     private FloatBuffer instanceDataBuffer;
 
-    public InstancedMesh(float[] positions, float[] textCoords, float[] normals, int[] indices, int numInstances) {
-        super(positions, textCoords, normals, indices, createEmptyIntArray(MAX_WEIGHTS * positions.length / 3, 0), createEmptyFloatArray(MAX_WEIGHTS * positions.length / 3, 0));
+    public InstancedMesh(float[] positions, float[] textCoords, float[] normals, int[] indices, int numInstances, float[] bounds) {
+        super(positions, textCoords, normals, indices, createEmptyIntArray(MAX_WEIGHTS * positions.length / 3, 0), createEmptyFloatArray(MAX_WEIGHTS * positions.length / 3, 0), bounds);
 
         this.numInstances = numInstances;
 

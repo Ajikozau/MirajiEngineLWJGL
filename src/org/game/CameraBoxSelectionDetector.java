@@ -1,11 +1,12 @@
 package org.game;
 
+import java.util.List;
 import java.util.Set;
 import org.joml.Intersectionf;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.engine.graph.Camera;
-import org.engine.items.GameElement;
+import org.engine.elements.GameElement;
 
 public class CameraBoxSelectionDetector {
 
@@ -21,12 +22,12 @@ public class CameraBoxSelectionDetector {
         nearFar = new Vector2f();
     }
 
-    public void selectGameItem(Set<GameElement> gameItems, Camera camera) {        
+    public void selectGameItem(List<GameElement> gameItems, Camera camera) {        
         dir = camera.getViewMatrix().positiveZ(dir).negate();
         selectGameItem(gameItems, camera.getPosition(), dir);
     }
     
-    protected boolean selectGameItem(Set<GameElement> gameItems, Vector3f center, Vector3f dir) {
+    protected boolean selectGameItem(List<GameElement> gameItems, Vector3f center, Vector3f dir) {
         boolean selected = false;
         GameElement selectedGameItem = null;
         float closestDistance = Float.POSITIVE_INFINITY;

@@ -1,8 +1,8 @@
 package org.engine;
 
 import helper.StaticHelpers;
-import org.engine.items.SkyBox;
-import org.engine.items.GameElement;
+import org.engine.elements.SkyBox;
+import org.engine.elements.GameElement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -53,10 +53,9 @@ public class Scene {
         renderShadows = true;
     }    
 
-    public void setGameElements(Set<GameElement> gameElements) {
+    public void setGameElements(List<GameElement> gameElements) {
         // Create a map of meshes to speed up rendering              
-        StaticHelpers.iterateSet(gameElements, e -> {
-            GameElement element = (GameElement) e;
+        StaticHelpers.iterateList(gameElements, element -> {
             Mesh[] meshes = element.getMeshes();
             for (Mesh mesh : meshes) {
                 boolean instancedMesh = mesh instanceof InstancedMesh;

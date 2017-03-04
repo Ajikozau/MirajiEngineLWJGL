@@ -12,10 +12,10 @@ import org.joml.Vector4f;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL13.*;
 import static org.lwjgl.opengl.GL30.*;
-import org.engine.items.GameElement;
+import org.engine.elements.GameElement;
 import org.engine.Scene;
 import org.engine.SceneLight;
-import org.engine.items.SkyBox;
+import org.engine.elements.SkyBox;
 import helper.Utils;
 import java.util.Set;
 import org.engine.Window;
@@ -60,7 +60,7 @@ public class Renderer {
         renderSkyBox(window, camera, scene);
         renderParticles(window, camera, scene);
         //renderAxes(camera);
-        renderCrossHair(window);
+        //renderCrossHair(window);
     }
 
     private void setupParticlesShader() throws Exception {
@@ -144,14 +144,16 @@ public class Renderer {
         Set<IParticleEmitter> emitters = scene.getParticleEmitters();
         glDepthMask(false);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-        StaticHelpers.iterateSet(emitters, e -> {
-            IParticleEmitter emitter = (IParticleEmitter) e;
-            InstancedMesh mesh = (InstancedMesh) emitter.getBaseParticle().getMesh();
-            Texture text = mesh.getMaterial().getTexture();
-            particlesShaderProgram.setUniform("numCols", text.getNumCols());
-            particlesShaderProgram.setUniform("numRows", text.getNumRows());
-            mesh.renderListInstanced(emitter.getParticles(), true, transformation, viewMatrix, null);
-        });
+        //Remove this check later on
+        if (emitters != null){
+            StaticHelpers.iterateSet(emitters, emitter -> {
+                InstancedMesh mesh = (InstancedMesh) emitter.getBaseParticle().getMesh();
+                Texture text = mesh.getMaterial().getTexture();
+                particlesShaderProgram.setUniform("numCols", text.getNumCols());
+                particlesShaderProgram.setUniform("numRows", text.getNumRows());
+                mesh.renderListInstanced(emitter.getParticles(), true, transformation, viewMatrix, null);
+            });
+        }
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glDepthMask(true);
         particlesShaderProgram.unbind();
@@ -228,8 +230,7 @@ public class Renderer {
         sceneShaderProgram.setUniform("isInstanced", 0);
         // Render each mesh with the associated game Items
         Map<Mesh, List<GameElement>> mapMeshes = scene.getGameMeshes();
-        StaticHelpers.iterateSet(mapMeshes.keySet(), m -> {
-            Mesh mesh = (Mesh) m;
+        StaticHelpers.iterateSet(mapMeshes.keySet(), mesh -> {
             if (viewMatrix != null) {
                 shader.setUniform("material", mesh.getMaterial());
                 glActiveTexture(GL_TEXTURE2);
@@ -332,13 +333,11 @@ public class Renderer {
             float inc = 0.05f;
             glLineWidth(2.0f);
             glBegin(GL_LINES);
-            glColor3f(1.0f, 1.0f, 1.0f);
+            glColor3f(1.0f, 0.0f, 0.0f);
             // Horizontal line
             glVertex3f(-inc, 0.0f, 0.0f);
             glVertex3f(+inc, 0.0f, 0.0f);
-            glEnd();
             // Vertical line
-            glBegin(GL_LINES);
             glVertex3f(0.0f, -inc, 0.0f);
             glVertex3f(0.0f, +inc, 0.0f);
             glEnd();

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import org.joml.Vector3f;
-import org.engine.items.GameElement;
+import org.engine.elements.GameElement;
 
 public class FlowParticleEmitter implements IParticleEmitter {
 
@@ -79,20 +79,20 @@ public class FlowParticleEmitter implements IParticleEmitter {
         }
 
         int length = this.getParticles().size();
-        if (now - lastCreationTime >= this.creationPeriodMillis && length < maxParticles) {
+        if (now - lastCreationTime >= creationPeriodMillis && length < maxParticles) {
             createParticle();
             this.lastCreationTime = now;
         }
     }
 
     private void createParticle() {
-        Particle particle = new Particle(this.getBaseParticle());
+        Particle particle = new Particle(baseParticle);
         // Add a little bit of randomness of the parrticle
         float sign = Math.random() > 0.5d ? -1.0f : 1.0f;
-        float speedInc = sign * (float)Math.random() * this.speedRndRange;
-        float posInc = sign * (float)Math.random() * this.positionRndRange;        
-        float scaleInc = sign * (float)Math.random() * this.scaleRndRange;        
-        long updateAnimInc = (long)sign *(long)(Math.random() * (float)this.animRange);
+        float speedInc = sign * (float)Math.random() * speedRndRange;
+        float posInc = sign * (float)Math.random() * positionRndRange;        
+        float scaleInc = sign * (float)Math.random() * scaleRndRange;        
+        long updateAnimInc = (long)sign *(long)(Math.random() * (float)animRange);
         particle.getPosition().add(posInc, posInc, posInc);
         particle.getSpeed().add(speedInc, speedInc, speedInc);
         particle.setScale(particle.getScale() + scaleInc);

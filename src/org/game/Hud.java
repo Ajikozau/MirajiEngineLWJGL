@@ -17,20 +17,15 @@ import org.engine.Window;
 
 public class Hud {
 
-    private static final String FONT_NAME = "BOLD";
-
-    private long vg;
-
-    private NVGColor colour;
-
-    private ByteBuffer fontBuffer;
-
+    private static final String FONT_NAME = "BOLD";    
+    
     private final DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-
+    
+    private long vg;
+    private NVGColor colour;
+    private ByteBuffer fontBuffer;
     private DoubleBuffer posx;
-
     private DoubleBuffer posy;
-
     private int counter;
 
     public void init(Window window) throws Exception {

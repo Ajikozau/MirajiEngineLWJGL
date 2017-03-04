@@ -1,11 +1,11 @@
 package org.engine.graph.particles;
 
+import org.engine.elements.Entity;
 import org.joml.Vector3f;
 import org.engine.graph.Mesh;
 import org.engine.graph.Texture;
-import org.engine.items.GameElement;
 
-public class Particle extends GameElement {
+public class Particle extends Entity {
 
     private long updateTextureMillis;    
     public long getUpdateTextureMillis() { return updateTextureMillis; }  
@@ -72,4 +72,8 @@ public class Particle extends GameElement {
         }
         return this.ttl;
     }    
+    
+    @Override
+    public void update(){        
+    }
 }

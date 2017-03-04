@@ -3,7 +3,7 @@ package org.engine.graph;
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
-import org.engine.items.GameElement;
+import org.engine.elements.GameElement;
 
 public class Transformation {
 

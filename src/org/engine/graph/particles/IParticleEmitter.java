@@ -1,7 +1,7 @@
 package org.engine.graph.particles;
 
 import java.util.List;
-import org.engine.items.GameElement;
+import org.engine.elements.GameElement;
 
 public interface IParticleEmitter {
     Particle getBaseParticle();    

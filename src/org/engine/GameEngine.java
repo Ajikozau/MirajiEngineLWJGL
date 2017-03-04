@@ -1,5 +1,7 @@
 package org.engine;
 
+import org.game.Game;
+
 public class GameEngine implements Runnable {
 
     public static final int TARGET_FPS = 75;
@@ -8,18 +10,18 @@ public class GameEngine implements Runnable {
     private final Window window;
     private final Thread gameLoopThread;
     private final Timer timer;
-    private final IGameLogic gameLogic;
+    private final Game gameLogic;
     private final MouseInput mouseInput;
 
     private double lastFps;    
     private int fps;    
     private String windowTitle;
     
-    public GameEngine(String windowTitle, boolean vSync, Window.WindowOptions opts, IGameLogic gameLogic) throws Exception {
+    public GameEngine(String windowTitle, boolean vSync, Window.WindowOptions opts, Game gameLogic) throws Exception {
         this(windowTitle, 0, 0, vSync, opts, gameLogic);
     }
 
-    public GameEngine(String windowTitle, int width, int height, boolean vSync, Window.WindowOptions opts, IGameLogic gameLogic) throws Exception {
+    public GameEngine(String windowTitle, int width, int height, boolean vSync, Window.WindowOptions opts, Game gameLogic) throws Exception {
         this.windowTitle = windowTitle;
         gameLoopThread = new Thread(this, "GAME_LOOP_THREAD");
         window = new Window(windowTitle, width, height, vSync, opts);

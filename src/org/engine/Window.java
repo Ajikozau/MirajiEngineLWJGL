@@ -79,14 +79,14 @@ public class Window {
         // If no size has been specified set it to maximized state
         if (width == 0 || height == 0) {
             // Set up a fixed width and height so window initialization does not fail
-            width = 100;
-            height = 100;
+            width = 1920;
+            height = 1080;
             glfwWindowHint(GLFW_MAXIMIZED, GLFW_TRUE);
             maximized = true;
         }
 
         // Create the window
-        windowHandle = glfwCreateWindow(width, height, title, NULL, NULL);
+        windowHandle = glfwCreateWindow(width, height, title, glfwGetPrimaryMonitor(), NULL);
         if (windowHandle == NULL) {
             throw new RuntimeException("Failed to create the GLFW window");
         }

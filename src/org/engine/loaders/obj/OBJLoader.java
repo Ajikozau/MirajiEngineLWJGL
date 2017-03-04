@@ -1,5 +1,6 @@
 package org.engine.loaders.obj;
 
+import helper.StaticHelpers;
 import java.util.ArrayList;
 import java.util.List;
 import org.joml.Vector2f;
@@ -60,41 +61,78 @@ public class OBJLoader {
         return reorderLists(vertices, textures, normals, faces, instances);
     }
 
-    private static Mesh reorderLists(List<Vector3f> posList, List<Vector2f> textCoordList,
-            List<Vector3f> normList, List<Face> facesList, int instances) {
+    private static Mesh reorderLists(List<Vector3f> posList, List<Vector2f> textCoordList, List<Vector3f> normList, List<Face> facesList, int instances) {
 
         List<Integer> indices = new ArrayList();
         // Create position array in the order it has been declared
-        float[] posArr = new float[posList.size() * 3];
-        int i = 0;
+        float[] posArr = new float[posList.size() * 3];        
+        float sx = 0;
+        float sy = 0;
+        float sz = 0;
+        float ex = 0;
+        float ey = 0;
+        float ez = 0;
+        int i = 0;        
         for (Vector3f pos : posList) {
-            posArr[i * 3] = pos.x;
-            posArr[i * 3 + 1] = pos.y;
-            posArr[i * 3 + 2] = pos.z;
+            float x = pos.x;
+            float y = pos.y;
+            float z = pos.z;
+            if(i == 0){
+                sx = x;
+                ex = x;
+                sy = y;
+                ey = y;
+                sz = z;
+                ez = z;
+            } else {
+                if (sx > x){
+                    sx = x;
+                }
+                if (sy > y){
+                    sy = y;
+                }
+                if (sz > z){
+                    sz = z;
+                }
+                if (ex < x){
+                    ex = x;
+                }
+                if (ey < y){
+                    ey = y;
+                }
+                if (ez < z){
+                    ez = z;
+                }
+            }
+            posArr[i * 3] = x;
+            posArr[i * 3 + 1] = y;
+            posArr[i * 3 + 2] = z;
             i++;
-        }
+        }        
+        //-x, -y, -z; +x, +y, +z
+        
         float[] textCoordArr = new float[posList.size() * 2];
         float[] normArr = new float[posList.size() * 3];
-
-        for (Face face : facesList) {
+        float[] bounds = new float[]{sx, sy, sz, ex, ey, ez};
+        
+        StaticHelpers.iterateList(facesList, face -> {
             IdxGroup[] faceVertexIndices = face.getFaceVertexIndices();
             for (IdxGroup indValue : faceVertexIndices) {
-                processFaceVertex(indValue, textCoordList, normList,
-                        indices, textCoordArr, normArr);
+                processFaceVertex(indValue, textCoordList, normList, indices, textCoordArr, normArr);
             }
-        }
+        });
+        
         int[] indicesArr = Utils.listIntToArray(indices);
         Mesh mesh;
         if (instances > 1) {
-            mesh = new InstancedMesh(posArr, textCoordArr, normArr, indicesArr, instances);
+            mesh = new InstancedMesh(posArr, textCoordArr, normArr, indicesArr, instances, bounds);
         } else {
-            mesh = new Mesh(posArr, textCoordArr, normArr, indicesArr);
+            mesh = new Mesh(posArr, textCoordArr, normArr, indicesArr, bounds);
         }
         return mesh;
     }
 
-    private static void processFaceVertex(IdxGroup indices, List<Vector2f> textCoordList,
-            List<Vector3f> normList, List<Integer> indicesList,
+    private static void processFaceVertex(IdxGroup indices, List<Vector2f> textCoordList, List<Vector3f> normList, List<Integer> indicesList,
             float[] texCoordArr, float[] normArr) {
 
         // Set index for vertex coordinates

@@ -3,7 +3,7 @@ package org.engine.graph.anim;
 import java.util.List;
 import org.joml.Matrix4f;
 import org.engine.graph.Mesh;
-import org.engine.items.GameElement;
+import org.engine.elements.GameElement;
 
 public class AnimGameElement extends GameElement {
 

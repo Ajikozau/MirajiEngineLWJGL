@@ -17,7 +17,7 @@ import org.engine.graph.anim.AnimatedFrame;
 public class MD5Loader {
 
     /**
-     * Constructs and AnimGameItem instace based on a MD5 Model an MD5 Animation
+     * Constructs and AnimGameItem instance based on a MD5 Model an MD5 Animation
      *
      * @param md5Model The MD5 Model
      * @param animModel The MD5 Animation
@@ -193,11 +193,47 @@ public class MD5Loader {
         List<Float> normals = new ArrayList<>();
         List<Integer> jointIndices = new ArrayList<>();
         List<Float> weights = new ArrayList<>();
-
+        float sx = 0;
+        float sy = 0;
+        float sz = 0;
+        float ex = 0;
+        float ey = 0;
+        float ez = 0;
+        int n = 0;
         for (AnimVertex vertex : vertices) {
-            positions.add(vertex.position.x);
-            positions.add(vertex.position.y);
-            positions.add(vertex.position.z);
+            float x = vertex.position.x;
+            float y = vertex.position.y;
+            float z = vertex.position.z;
+            if(n == 0){
+                sx = x;
+                ex = x;
+                sy = y;
+                ey = y;
+                sz = z;
+                ez = z;
+            } else {
+                if (sx < x){
+                    sx = x;
+                }
+                if (ex > x){
+                    ex = x;
+                }
+                if (sy < y){
+                    sy = y;
+                }
+                if (ey > y){
+                    ey = y;
+                }
+                if (sz < z){
+                    sz = z;
+                }
+                if (ez > z){
+                    ez = z;
+                }
+            }
+            positions.add(x);
+            positions.add(y);
+            positions.add(z);
 
             textCoords.add(vertex.textCoords.x);
             textCoords.add(vertex.textCoords.y);
@@ -224,8 +260,9 @@ public class MD5Loader {
         int[] indicesArr = Utils.listIntToArray(indices);
         int[] jointIndicesArr = Utils.listIntToArray(jointIndices);
         float[] weightsArr = Utils.listToArray(weights);
-
-        Mesh result = new Mesh(positionsArr, textCoordsArr, normalsArr, indicesArr, jointIndicesArr, weightsArr);
+        float[] bounds = new float[]{sx, sy, sz, ex, ey, ez};
+        
+        Mesh result = new Mesh(positionsArr, textCoordsArr, normalsArr, indicesArr, jointIndicesArr, weightsArr, bounds);
 
         return result;
     }

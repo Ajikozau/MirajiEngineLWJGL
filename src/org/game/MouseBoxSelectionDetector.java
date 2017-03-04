@@ -1,13 +1,13 @@
 package org.game;
 
-import java.util.Set;
+import java.util.List;
 import org.joml.Matrix4f;
 import org.joml.Vector2d;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 import org.engine.Window;
 import org.engine.graph.Camera;
-import org.engine.items.GameElement;
+import org.engine.elements.GameElement;
 
 public class MouseBoxSelectionDetector extends CameraBoxSelectionDetector {
 
@@ -24,7 +24,7 @@ public class MouseBoxSelectionDetector extends CameraBoxSelectionDetector {
         tmpVec = new Vector4f();
     }
     
-    public boolean selectGameItem(Set<GameElement> gameItems, Window window, Vector2d mousePos, Camera camera) {
+    public boolean selectGameItem(List<GameElement> gameItems, Window window, Vector2d mousePos, Camera camera) {
         // Transform mouse coordinates into normalized spaze [-1, 1]
                 
         float x = (float)(2 * mousePos.x) / (float)window.getWidth() - 1.0f;

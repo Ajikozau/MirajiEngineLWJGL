@@ -5,7 +5,6 @@
  */
 package org.engine;
 
-import helper.Utils;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
@@ -34,7 +33,7 @@ public class BufferOperations {
             }
         } else {
             try (
-                    InputStream source = Utils.class.getResourceAsStream(resource);
+                    InputStream source = BufferOperations.class.getResourceAsStream(resource);
                     ReadableByteChannel rbc = Channels.newChannel(source)) {
                 buffer = createByteBuffer(bufferSize);
 
