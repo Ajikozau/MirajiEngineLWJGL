@@ -208,7 +208,7 @@ public class DefaultGameState extends GameState {
         game.soundMgr.updateListenerPosition(camera);
 
         boolean aux = mouseInput.isLeftButtonPressed();        
-        if (aux && !leftButtonPressed && game.selectDetector.selectGameItem(game.gameElements, window, mouseInput.getCurrentPos(), camera)) {
+        if (aux && !leftButtonPressed && game.selectDetector.selectGameItem(game.getGameElements(), window, mouseInput.getCurrentPos(), camera)) {
             game.hud.incCounter();
             System.out.print(mouseInput.getCurrentPos());
         }

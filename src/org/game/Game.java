@@ -1,5 +1,6 @@
 package org.game;
 
+import java.util.ArrayList;
 import java.util.List;
 import org.joml.Vector3f;
 import org.engine.MouseInput;
@@ -31,14 +32,21 @@ public abstract class Game {
     protected enum Sounds {
         MUSIC, BEEP, FIRE
     };
-    protected List<GameElement> gameElements;
+    protected List<List<GameElement>> gameElements;
+    public List<List<GameElement>> getGameElements() {  return gameElements; }
+    protected List<GameElement> layoutElements;
+    public List<GameElement> getLayoutElements() { return layoutElements; }
+    
 
     public Game() {
         gameState = new DefaultGameState(this, new Vector3f(0.0f, 0.0f, 0.0f), 0, 45);
         renderer = new Renderer();
         hud = new Hud();
         soundMgr = new SoundManager();
-        camera = new Camera();
+        camera = new Camera();        
+        gameElements = new ArrayList<>();
+        layoutElements = new ArrayList<>();
+        gameElements.add(layoutElements);
     }
     
     public void init(Window window) throws Exception {

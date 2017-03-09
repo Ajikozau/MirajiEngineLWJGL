@@ -53,9 +53,10 @@ public class Scene {
         renderShadows = true;
     }    
 
-    public void setGameElements(List<GameElement> gameElements) {
+    public void setGameElements(List<List<GameElement>> gameElements) {
         // Create a map of meshes to speed up rendering              
-        StaticHelpers.iterateList(gameElements, element -> {
+        StaticHelpers.iterateList(gameElements, elementList -> {
+            StaticHelpers.iterateList(elementList, element -> {
             Mesh[] meshes = element.getMeshes();
             for (Mesh mesh : meshes) {
                 boolean instancedMesh = mesh instanceof InstancedMesh;
@@ -70,6 +71,7 @@ public class Scene {
                 }
                 list.add(element);
             }
+            });
         });
     }
 

@@ -1,7 +1,6 @@
 package org.game;
 
 import java.util.List;
-import java.util.Set;
 import org.joml.Intersectionf;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
@@ -13,7 +12,7 @@ public class CameraBoxSelectionDetector {
     private final Vector3f max;
     private final Vector3f min;
     private final Vector2f nearFar;
-    private Vector3f dir;
+    private final Vector3f dir;
 
     public CameraBoxSelectionDetector() {
         dir = new Vector3f();
@@ -22,24 +21,26 @@ public class CameraBoxSelectionDetector {
         nearFar = new Vector2f();
     }
 
-    public void selectGameItem(List<GameElement> gameItems, Camera camera) {        
-        dir = camera.getViewMatrix().positiveZ(dir).negate();
-        selectGameItem(gameItems, camera.getPosition(), dir);
+    public void selectGameItem(List<List<GameElement>> gameElements, Camera camera) {        
+        dir.set(camera.getViewMatrix().positiveZ(dir).negate());
+        selectGameItem(gameElements, camera.getPosition(), dir);
     }
     
-    protected boolean selectGameItem(List<GameElement> gameItems, Vector3f center, Vector3f dir) {
+    protected boolean selectGameItem(List<List<GameElement>> gameElements, Vector3f center, Vector3f dir) {
         boolean selected = false;
         GameElement selectedGameItem = null;
         float closestDistance = Float.POSITIVE_INFINITY;
-        for (GameElement gameItem : gameItems) {
-            gameItem.setSelected(false);
-            min.set(gameItem.getPosition());
-            max.set(gameItem.getPosition());
-            min.add(-gameItem.getScale(), -gameItem.getScale(), -gameItem.getScale());
-            max.add(gameItem.getScale(), gameItem.getScale(), gameItem.getScale());
-            if (Intersectionf.intersectRayAab(center, dir, min, max, nearFar) && nearFar.x < closestDistance) {
-                closestDistance = nearFar.x;
-                selectedGameItem = gameItem;
+        for (List<GameElement> gameElementList : gameElements){
+            for (GameElement gameElement : gameElementList){
+                gameElement.setSelected(false);
+                min.set(gameElement.getPosition());
+                max.set(gameElement.getPosition());
+                min.add(-gameElement.getScale(), -gameElement.getScale(), -gameElement.getScale());
+                max.add(gameElement.getScale(), gameElement.getScale(), gameElement.getScale());
+                if (Intersectionf.intersectRayAab(center, dir, min, max, nearFar) && nearFar.x < closestDistance) {
+                    closestDistance = nearFar.x;
+                    selectedGameItem = gameElement;
+                }
             }
         }
         if (selectedGameItem != null) {

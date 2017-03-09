@@ -24,7 +24,7 @@ public class MouseBoxSelectionDetector extends CameraBoxSelectionDetector {
         tmpVec = new Vector4f();
     }
     
-    public boolean selectGameItem(List<GameElement> gameItems, Window window, Vector2d mousePos, Camera camera) {
+    public boolean selectGameItem(List<List<GameElement>> gameItems, Window window, Vector2d mousePos, Camera camera) {
         // Transform mouse coordinates into normalized spaze [-1, 1]
                 
         float x = (float)(2 * mousePos.x) / (float)window.getWidth() - 1.0f;
